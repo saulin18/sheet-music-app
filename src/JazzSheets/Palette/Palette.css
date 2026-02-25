@@ -1,0 +1,66 @@
+.note-palette {
+  background: #16213e;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.palette-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.palette-section h3 {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #4ecdc4;
+  font-weight: 600;
+}
+
+.palette-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.palette-btn {
+  background: #2d2d44;
+  border: 2px solid #2d2d44;
+  color: #e8e8e8;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.palette-btn:hover {
+  background: #3d3d54;
+  border-color: #4ecdc4;
+}
+
+.palette-btn.active {
+  background: #4ecdc4;
+  border-color: #4ecdc4;
+  color: #1a1a2e;
+}
+
+.clear-btn {
+  background: #ff6b6b;
+  border-color: #ff6b6b;
+  color: #1a1a2e;
+}
+
+.clear-btn:hover {
+  background: #ff8585;
+  border-color: #ff8585;
+}

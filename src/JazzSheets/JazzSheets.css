@@ -1,0 +1,64 @@
+.app {
+  min-height: 100vh;
+  background: #1a1a2e;
+  color: #e8e8e8;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.app-header {
+  padding: 24px;
+  text-align: center;
+  background: #16213e;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #4ecdc4;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #888;
+}
+
+.app-main {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.staff-section {
+  cursor: pointer;
+}
+
+.staff-section:hover .staff {
+  box-shadow: 0 4px 30px rgba(78, 205, 196, 0.2);
+}
+
+.sidebar {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+  .app-main {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+  }
+}

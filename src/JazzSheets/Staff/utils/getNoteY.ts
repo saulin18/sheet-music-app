@@ -2,6 +2,9 @@ import type { NoteName, Note } from "#shared/types";
 import { LINE_SPACING, STAFF_TOP } from "./constants";
 
 export const getNoteY = (note: Note): number => {
+  if (note.note === null) {
+    return STAFF_TOP - 10;
+  }
   const rawY = noteToYPosition(note.note, note.octave);
   const middleLineY = STAFF_TOP - 10;
   return middleLineY - rawY * (LINE_SPACING / 2);

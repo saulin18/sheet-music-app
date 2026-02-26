@@ -9,6 +9,8 @@ interface PaletteProps {
   selectedDuration: Duration;
   selectedAccidental: Accidental;
   isRest: boolean;
+  selectedNoteOctave: number;
+  setSelectedNoteOctave: React.Dispatch<React.SetStateAction<number>>;
   onNoteSelect: (note: NoteName) => void;
   onChordSelect: (note: NoteName) => void;
   onDurationSelect: (duration: Duration) => void;
@@ -29,11 +31,45 @@ export const Palette: React.FC<PaletteProps> = ({
   onAccidentalToggle,
   onRestToggle,
   onClear,
+  setSelectedNoteOctave,
+  selectedNoteOctave,
 }) => {
   return (
     <div className="note-palette">
       <div className="palette-section">
-        <h3>Note</h3>
+        <div className="flex">
+          <h3>Note</h3>
+          <div className="flex">
+            Octave: {selectedNoteOctave}
+            <button
+              className="less-y-padding"
+              onClick={() =>
+                setSelectedNoteOctave((prev) => {
+                  if (prev <= 3) return prev;
+                  else {
+                    return prev - 1;
+                  }
+                })
+              }
+            >
+              -
+            </button>
+            <button
+              className="less-y-padding"
+              onClick={() =>
+                setSelectedNoteOctave((prev) => {
+                  // if (prev <= 2) return prev;
+                  if (prev >= 5) return prev;
+                  else {
+                    return prev + 1;
+                  }
+                })
+              }
+            >
+              +
+            </button>
+          </div>
+        </div>
         <div className="palette-buttons">
           {NOTE_NAMES.map((note) => (
             <button

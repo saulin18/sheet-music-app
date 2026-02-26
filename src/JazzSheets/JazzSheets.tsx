@@ -16,6 +16,7 @@ import './JazzSheets.css';
 export function JazzSheets() {
   const [music, setMusic] = useState<(Note | Chord)[]>([]);
   const [selectedNote, setSelectedNote] = useState<NoteName | null>('C');
+  const [selectedNoteOctave, setSelectedNoteOctave] = useState(4);
   const [selectedChord, setSelectedChord] = useState<NoteName | null>('C');
 
   const [selectedDuration, setSelectedDuration] = useState<Duration>('quarter');
@@ -47,7 +48,7 @@ export function JazzSheets() {
         id: generateId(),
         note: selectedNote,
         accidental: selectedAccidental,
-        octave: 4,
+        octave: selectedNoteOctave,
         duration: selectedDuration,
         position: maxPosition,
         isRest: isRest,
@@ -125,6 +126,8 @@ export function JazzSheets() {
             selectedDuration={selectedDuration}
             selectedAccidental={selectedAccidental}
             isRest={isRest}
+            selectedNoteOctave={selectedNoteOctave}
+            setSelectedNoteOctave={setSelectedNoteOctave}
             onNoteSelect={setSelectedNote}
             onChordSelect={setSelectedChord}
             onDurationSelect={setSelectedDuration}

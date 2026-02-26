@@ -47,10 +47,11 @@
 }
 
 .staff-section:hover .staff {
-  box-shadow: 0 4px 30px rgba(78, 205, 196, 0.2);
+  background-color: #2d2d44;
+  border-radius: 20px;
 }
 
-.palette-and-saved-songs{
+.palette-and-saved-songs {
   display: flex;
   gap: 20px;
 }

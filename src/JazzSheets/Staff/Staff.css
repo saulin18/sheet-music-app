@@ -156,7 +156,6 @@
 }
 .chord:hover {
   transform: scale(1.15);
-  /* \ translateY(-5px); */
 }
 
 .for-chord {

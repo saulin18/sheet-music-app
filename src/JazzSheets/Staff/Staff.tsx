@@ -1,4 +1,4 @@
-import React, { useRef, type MouseEvent } from 'react';
+import React, { useEffect, useRef, type MouseEvent } from 'react';
 import type { Chord, Note } from '#shared/types';
 import './Staff.css';
 import {
@@ -13,8 +13,10 @@ interface StaffProps {
   music: (Note | Chord)[];
   currentPosition: number;
   isPlaying: boolean;
-  onNoteClick: (position: number) => void;
+  onNoteClick?: (position: number) => void;
   onDelete: (id: string) => void;
+
+  onMaximumWidthChange?: (actualWidth: number) => void;
 }
 
 export const Staff: React.FC<StaffProps> = ({
@@ -22,9 +24,10 @@ export const Staff: React.FC<StaffProps> = ({
   currentPosition,
   onNoteClick,
   onDelete,
+  onMaximumWidthChange,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-
+  const lastWidthRef = useRef(0);
   const renderNoteBarOrChord = (noteOrChord: Note | Chord) => {
     const x = STAFF_PADDING + noteOrChord.position * NOTE_WIDTH;
 
@@ -61,8 +64,11 @@ export const Staff: React.FC<StaffProps> = ({
         <div
           key={noteOrChord.id}
           className={`note ${noteOrChord.duration} ${isActive ? 'active' : ''}`}
-          style={{ left: x }}
-          onClick={() => onNoteClick(noteOrChord.position)}
+          style={{ left: x, maxWidth: '100%' }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onNoteClick &&onNoteClick(noteOrChord.position);
+          }}
           onContextMenu={handleDelete}
         >
           {renderLedgerLines(y)}
@@ -120,11 +126,31 @@ export const Staff: React.FC<StaffProps> = ({
     STAFF_PADDING * 2 + (music.length + 1) * NOTE_WIDTH,
   );
 
+  useEffect(() => {
+    if (!onMaximumWidthChange) return;
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handler = () => {
+      const actualWidth = el.clientWidth;
+      if (actualWidth !== lastWidthRef.current) {
+        lastWidthRef.current = actualWidth;
+        onMaximumWidthChange(actualWidth);
+      }
+    };
+
+    const ro = new ResizeObserver(handler);
+    ro.observe(el);
+    handler();
+
+    return () => ro.disconnect();
+  }, [music.length, onMaximumWidthChange]);
+
   return (
     <div className="staff-container" ref={containerRef}>
       <div
         className="staff-scroll"
-        style={{ width: '100%', overflowX: 'auto' }}
+        style={{ width: '100%' }}
       >
         <div className="staff" style={{ minWidth: totalWidth }}>
           <p className="clef">𝄞|</p>

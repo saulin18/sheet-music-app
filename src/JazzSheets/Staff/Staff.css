@@ -6,18 +6,19 @@
   overflow: hidden;
 }
 
-.staff-scroll {
-  overflow-x: auto;
-}
-
 .staff {
   position: relative;
   height: 160px;
   background: transparent;
-  min-width: 800px;
+ /* max-width: 800px; We don't need to set a max width here because it will be set by the parent */
   display: flex;
   align-items: center;
   justify-content: start;
+}
+
+/** Padding between rows */
+.staff-row{
+  padding-block: 10px;
 }
 
 .staff-line {
@@ -40,7 +41,10 @@
   height: 30px;
   cursor: pointer;
   transition: transform 0.1s ease;
+  isolation: isolate;
+  z-index: 10;
 }
+
 
 .note:hover {
   transform: scale(1.15) translateY(-3px);

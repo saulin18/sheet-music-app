@@ -130,16 +130,6 @@
   color: white;
 }
 
-.playhead {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: #4ecdc4;
-  box-shadow: 0 0 8px #4ecdc4;
-  transition: left 0.05s linear;
-}
-
 .chord {
   position: absolute;
   display: flex;

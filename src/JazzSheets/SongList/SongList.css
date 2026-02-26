@@ -1,0 +1,138 @@
+.song-list {
+  background: #16213e;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.song-list h3 {
+  margin: 0;
+  color: #4ecdc4;
+  font-size: 18px;
+}
+
+.save-section {
+  display: flex;
+  gap: 12px;
+}
+
+.song-name-input {
+  flex: 1;
+  background: #2d2d44;
+  border: 2px solid #2d2d44;
+  color: #e8e8e8;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.song-name-input:focus {
+  border-color: #4ecdc4;
+}
+
+.song-name-input::placeholder {
+  color: #888;
+}
+
+.save-btn {
+  background: #4ecdc4;
+  border: none;
+  color: #1a1a2e;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.save-btn:hover {
+  background: #5dddd4;
+  transform: translateY(-2px);
+}
+
+.error-msg {
+  color: #ff6b6b;
+  font-size: 14px;
+  margin: 0;
+}
+
+.songs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.no-songs {
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px;
+}
+
+.song-item {
+  background: #2d2d44;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.song-name {
+  color: #e8e8e8;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.song-info {
+  color: #888;
+  font-size: 12px;
+}
+
+.song-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.load-btn {
+  background: #4ecdc4;
+  border: none;
+  color: #1a1a2e;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.load-btn:hover {
+  background: #5dddd4;
+}
+
+.delete-btn {
+  background: #ff6b6b;
+  border: none;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: #ff8585;
+}

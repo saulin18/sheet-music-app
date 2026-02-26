@@ -29,7 +29,7 @@ export interface Feature {
 export interface Song {
   id: string;
   name: string;
-  notes: Note[];
+  notesAndChords: (Note | Chord)[];
   tempo: number;
 }
 

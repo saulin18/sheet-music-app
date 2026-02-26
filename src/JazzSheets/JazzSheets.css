@@ -48,17 +48,13 @@
   box-shadow: 0 4px 30px rgba(78, 205, 196, 0.2);
 }
 
-.sidebar {
-  width: 300px;
-  flex-shrink: 0;
+.palette-and-saved-songs{
+  display: flex;
+  gap: 20px;
 }
 
 @media (max-width: 1024px) {
   .app-main {
     flex-direction: column;
-  }
-  
-  .sidebar {
-    width: 100%;
   }
 }

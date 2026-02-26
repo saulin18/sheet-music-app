@@ -20,7 +20,6 @@ interface StaffProps {
 export const Staff: React.FC<StaffProps> = ({
   music,
   currentPosition,
-  isPlaying,
   onNoteClick,
   onDelete,
 }) => {
@@ -116,13 +115,6 @@ export const Staff: React.FC<StaffProps> = ({
     );
   };
 
-  const getPlayheadPosition = (): number => {
-    if (music.length === 0) return STAFF_PADDING;
-
-    const beatPosition = currentPosition;
-    return STAFF_PADDING + beatPosition * NOTE_WIDTH;
-  };
-
   const totalWidth = Math.max(
     800,
     STAFF_PADDING * 2 + (music.length + 1) * NOTE_WIDTH,
@@ -138,9 +130,6 @@ export const Staff: React.FC<StaffProps> = ({
           <p className="clef">𝄞|</p>
           {renderStaffLines()}
           {music.map((noteOrChord) => renderNoteBarOrChord(noteOrChord))}
-          {isPlaying && (
-            <div className="playhead" style={{ left: getPlayheadPosition() }} />
-          )}
         </div>
       </div>
     </div>

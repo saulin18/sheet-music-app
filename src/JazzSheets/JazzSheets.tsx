@@ -1,35 +1,47 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Staff } from './Staff';
 import { Palette } from './Palette';
-import {
-  generateId,
-} from '#shared/types';
+import { PlaybackControls } from './PlaybackControls';
+import { SongList } from './SongList';
+import { generateId } from '#shared/types';
+import { DURATION_BEATS } from '#shared/constants';
 import type {
   Note,
   NoteName,
   Duration,
   Accidental,
   Chord,
+  Song,
 } from '#shared/types';
 import './JazzSheets.css';
 
 export function JazzSheets() {
   const [music, setMusic] = useState<(Note | Chord)[]>([]);
   const [selectedNote, setSelectedNote] = useState<NoteName | null>('C');
-  const [selectedNoteOctave, setSelectedNoteOctave] = useState(4);
+  const [selectedNoteOctave, setSelectedNoteOctave] = useState<number>(4);
   const [selectedChord, setSelectedChord] = useState<NoteName | null>('C');
 
   const [selectedDuration, setSelectedDuration] = useState<Duration>('quarter');
   const [selectedAccidental, setSelectedAccidental] = useState<Accidental>('');
-  const [isRest, setIsRest] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentPosition, setCurrentPosition] = useState(0);
+  const [isRest, setIsRest] = useState<boolean>(false);
+  const [tempo, setTempo] = useState<number>(120);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [currentPosition, setCurrentPosition] = useState<number>(0);
 
   const animationRef = useRef<number | null>(null);
-  const positionRef = useRef(0);
+  const lastTimeRef = useRef<number>(0);
+  const positionRef = useRef<number>(0);
+
+  const getTotalBeats = useCallback(() => {
+    return music.reduce(
+      (total, note) => total + DURATION_BEATS[note.duration],
+      0,
+    );
+  }, [music]);
 
   const handleNoteClick = useCallback((position: number) => {
     console.log('noteClick ', position);
+    // setMusic((prev) => prev.filter((n) => n.position !== position));
   }, []);
 
   const handleDeletion = (id: string) => {
@@ -63,10 +75,48 @@ export function JazzSheets() {
         features: [],
       };
     }
+
     setMusic((prev) =>
       [...prev, newItem].sort((a, b) => a.position - b.position),
     );
   };
+
+  const handlePlay = useCallback(() => {
+    if (music.length === 0) return;
+
+    setIsPlaying(true);
+    positionRef.current = currentPosition;
+    lastTimeRef.current = performance.now();
+
+    const animate = (time: number) => {
+      const delta = (time - lastTimeRef.current) / 1000;
+      lastTimeRef.current = time;
+
+      const beatsPerSecond = tempo / 60;
+      positionRef.current += delta * beatsPerSecond;
+
+      const totalBeats = getTotalBeats();
+      if (positionRef.current >= totalBeats) {
+        positionRef.current = 0;
+        setCurrentPosition(0);
+        setIsPlaying(false);
+        return;
+      }
+
+      setCurrentPosition(positionRef.current);
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+  }, [music.length, tempo, currentPosition, getTotalBeats]);
+
+  const handlePause = useCallback(() => {
+    setIsPlaying(false);
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+    setCurrentPosition(positionRef.current);
+  }, []);
 
   const handleStop = useCallback(() => {
     setIsPlaying(false);
@@ -76,6 +126,19 @@ export function JazzSheets() {
     positionRef.current = 0;
     setCurrentPosition(0);
   }, []);
+
+  const handleTempoChange = useCallback((newTempo: number) => {
+    setTempo(newTempo);
+  }, []);
+
+  const handleLoadSong = useCallback(
+    (song: Song) => {
+      setMusic(song.notesAndChords);
+      setTempo(song.tempo);
+      handleStop();
+    },
+    [handleStop],
+  );
 
   const handleClear = useCallback(() => {
     setMusic([]);
@@ -119,21 +182,36 @@ export function JazzSheets() {
               onDelete={handleDeletion}
             />
           </div>
+          <div className="palette-and-saved-songs">
+            <Palette
+              selectedNote={selectedNote}
+              selectedChord={selectedChord}
+              selectedDuration={selectedDuration}
+              selectedAccidental={selectedAccidental}
+              isRest={isRest}
+              selectedNoteOctave={selectedNoteOctave}
+              setSelectedNoteOctave={setSelectedNoteOctave}
+              onNoteSelect={setSelectedNote}
+              onChordSelect={setSelectedChord}
+              onDurationSelect={setSelectedDuration}
+              onAccidentalToggle={setSelectedAccidental}
+              onRestToggle={() => setIsRest(!isRest)}
+              onClear={handleClear}
+            />
+            <SongList
+              currentNotes={music}
+              currentTempo={tempo}
+              onLoadSong={handleLoadSong}
+            />
+          </div>
 
-          <Palette
-            selectedNote={selectedNote}
-            selectedChord={selectedChord}
-            selectedDuration={selectedDuration}
-            selectedAccidental={selectedAccidental}
-            isRest={isRest}
-            selectedNoteOctave={selectedNoteOctave}
-            setSelectedNoteOctave={setSelectedNoteOctave}
-            onNoteSelect={setSelectedNote}
-            onChordSelect={setSelectedChord}
-            onDurationSelect={setSelectedDuration}
-            onAccidentalToggle={setSelectedAccidental}
-            onRestToggle={() => setIsRest(!isRest)}
-            onClear={handleClear}
+          <PlaybackControls
+            isPlaying={isPlaying}
+            tempo={tempo}
+            onPlay={handlePlay}
+            onPause={handlePause}
+            onStop={handleStop}
+            onTempoChange={handleTempoChange}
           />
         </div>
       </main>

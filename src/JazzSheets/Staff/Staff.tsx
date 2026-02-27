@@ -100,10 +100,14 @@ export const Staff: React.FC<StaffProps> = ({
         </div>
       );
     }
+
+
     // Is a chord :D
+
+    const isActiveChord = noteOrChord.position === Math.floor(currentPosition);
     return (
       <div
-        className="chord"
+        className={`chord ${isActiveChord ? 'active' : ''}`}
         key={noteOrChord.id}
         style={{
           left: x,

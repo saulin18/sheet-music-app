@@ -65,6 +65,10 @@
   background: #ff6b6b;
 }
 
+.chord.active {
+  color: #ff6b6b;
+}
+
 .note-stem {
   position: absolute;
   width: 1px;

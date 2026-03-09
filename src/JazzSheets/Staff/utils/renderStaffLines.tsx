@@ -1,4 +1,4 @@
-import { LINE_SPACING, STAFF_TOP } from "./constants";
+import { LINE_SPACING, STAFF_TOP } from './constants';
 
 export const renderStaffLines = () => {
   return Array.from({ length: 5 }, (_, i) => (

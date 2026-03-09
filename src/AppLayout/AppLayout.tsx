@@ -9,8 +9,12 @@ function AppLayout() {
           Create and play back sheet music in American notation
         </p>
         <nav className="app-nav">
-          <Link to="/" className="nav-link">Composer</Link>
-          <Link to="/songs" className="nav-link">Saved Songs</Link>
+          <Link to="/" className="nav-link">
+            Composer
+          </Link>
+          <Link to="/songs" className="nav-link">
+            Saved Songs
+          </Link>
         </nav>
       </header>
       <main className="app-main">

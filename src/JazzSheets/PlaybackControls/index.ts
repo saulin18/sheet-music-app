@@ -1,1 +1,1 @@
-export { PlaybackControls } from "./PlaybackControls";
+export { PlaybackControls } from './PlaybackControls';

@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState } from 'react';
 import type { Song, Note, Chord } from '#shared/types';
 import './SongList.css';
 
@@ -15,20 +15,26 @@ export const SongList: React.FC<SongListProps> = ({
   currentTempo,
   onLoadSong,
 }) => {
-  const [songs, setSongs] = useState<Song[]>([]);
-  const [songName, setSongName] = useState('');
-  const [error, setError] = useState<string | null>(null);
-
-  useLayoutEffect(() => {
+  const [songs, setSongs] = useState<Song[]>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setSongs(JSON.parse(stored));
-      } catch {
-        setError('Error loading saved songs');
-      }
+    if (!stored) return [];
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return [];
     }
-  }, []);
+  });
+  const [songName, setSongName] = useState('');
+  const [error, setError] = useState<string | null>(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return null;
+    try {
+      JSON.parse(stored);
+      return null;
+    } catch {
+      return 'Error loading saved songs';
+    }
+  });
 
   const saveSong = () => {
     if (!songName.trim()) {

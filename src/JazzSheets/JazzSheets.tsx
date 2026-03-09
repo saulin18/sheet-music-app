@@ -17,8 +17,6 @@ import type {
 import './JazzSheets.css';
 import { NOTE_WIDTH, STAFF_PADDING } from './Staff/utils/constants';
 
-let isInitializing = true;
-
 const pianoSampler = new Tone.Sampler({
   urls: {
     C4: 'C4.mp3',
@@ -39,7 +37,10 @@ const noteNameToTone = (
 };
 
 export function JazzSheets() {
-  const [music, setMusic] = useState<(Note | Chord)[]>([]);
+  const [music, setMusic] = useState<(Note | Chord)[]>(() => {
+    const saved = localStorage.getItem('music');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [selectedNote, setSelectedNote] = useState<NoteName | null>('C');
   const [selectedNoteOctave, setSelectedNoteOctave] = useState<number>(4);
   const [selectedChord, setSelectedChord] = useState<NoteName | null>('C');
@@ -64,21 +65,8 @@ export function JazzSheets() {
   const [rowsStaff, setRowsStaff] = useState<
     { notes: (Note | Chord)[]; position: number }[]
   >([]);
-  const didLoadFromStorage = useRef(false);
   const skipInitialSave = useRef(false);
   const lastWidthRef = useRef(0);
-
-  //Get the music from the localStorage
-  useEffect(() => {
-    if (isInitializing) {
-      isInitializing = false;
-      const savedMusic = localStorage.getItem('music');
-      if (savedMusic) {
-        setMusic(JSON.parse(savedMusic));
-      }
-      didLoadFromStorage.current = true;
-    }
-  }, []);
 
   const handleNoteClick = useCallback((position: number) => {
     console.log('noteClick ', position);
@@ -226,14 +214,15 @@ export function JazzSheets() {
     };
   }, []);
 
-  useEffect(() => {
-    if (typeof selectedChord === 'string') {
-      setSelectedNote(null);
-    }
-    if (typeof selectedNote === 'string') {
-      setSelectedChord(null);
-    }
-  }, [selectedChord, selectedNote]);
+  const handleNoteSelect = useCallback((note: NoteName | null) => {
+    setSelectedNote(note);
+    if (note !== null) setSelectedChord(null);
+  }, []);
+
+  const handleChordSelect = useCallback((chord: NoteName | null) => {
+    setSelectedChord(chord);
+    if (chord !== null) setSelectedNote(null);
+  }, []);
 
   /**
    * We pass the actual width of the staff and we use it to calculate the number of notes per row
@@ -351,8 +340,8 @@ export function JazzSheets() {
           isRest={isRest}
           selectedNoteOctave={selectedNoteOctave}
           setSelectedNoteOctave={setSelectedNoteOctave}
-          onNoteSelect={setSelectedNote}
-          onChordSelect={setSelectedChord}
+          onNoteSelect={handleNoteSelect}
+          onChordSelect={handleChordSelect}
           onDurationSelect={setSelectedDuration}
           onAccidentalToggle={setSelectedAccidental}
           onRestToggle={() => setIsRest(!isRest)}

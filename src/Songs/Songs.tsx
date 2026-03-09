@@ -11,7 +11,15 @@ const STORAGE_KEY = 'sheet-music-songs';
 
 export function Songs() {
   const navigate = useNavigate();
-  const [songs, setSongs] = useState<Song[]>([]);
+  const [songs, setSongs] = useState<Song[]>(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return [];
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return [];
+    }
+  });
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [music, setMusic] = useState<(Note | Chord)[]>([]);
   const [tempo, setTempo] = useState<number>(120);
@@ -20,23 +28,21 @@ export function Songs() {
   const [rowsStaff, setRowsStaff] = useState<
     { notes: (Note | Chord)[]; position: number }[]
   >([]);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return null;
+    try {
+      JSON.parse(stored);
+      return null;
+    } catch {
+      return 'Error loading saved songs';
+    }
+  });
 
   const animationRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
   const positionRef = useRef<number>(0);
   const lastWidthRef = useRef(0);
-
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setSongs(JSON.parse(stored));
-      } catch {
-        setError('Error loading saved songs');
-      }
-    }
-  }, []);
 
   const getTotalBeats = useCallback(() => {
     return music.reduce(
@@ -54,12 +60,15 @@ export function Songs() {
     setCurrentPosition(0);
   }, []);
 
-  const handleLoadSong = useCallback((song: Song) => {
-    setSelectedSong(song);
-    setMusic(song.notesAndChords);
-    setTempo(song.tempo);
-    handleStop();
-  }, []);
+  const handleLoadSong = useCallback(
+    (song: Song) => {
+      setSelectedSong(song);
+      setMusic(song.notesAndChords);
+      setTempo(song.tempo);
+      handleStop();
+    },
+    [handleStop],
+  );
 
   const handleDeleteSong = (id: string) => {
     const updatedSongs = songs.filter((s) => s.id !== id);
@@ -230,7 +239,9 @@ export function Songs() {
                       isPlaying={isPlaying}
                       onDelete={() => {}}
                       onMaximumWidthChange={
-                        row.position === 0 ? handleMaximumWidthChange : undefined
+                        row.position === 0
+                          ? handleMaximumWidthChange
+                          : undefined
                       }
                     />
                   ))}

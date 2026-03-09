@@ -67,7 +67,7 @@ export const Staff: React.FC<StaffProps> = ({
           style={{ left: x, maxWidth: '100%' }}
           onClick={(e) => {
             e.stopPropagation();
-            onNoteClick &&onNoteClick(noteOrChord.position);
+            onNoteClick?.(noteOrChord.position);
           }}
           onContextMenu={handleDelete}
         >
@@ -148,10 +148,7 @@ export const Staff: React.FC<StaffProps> = ({
 
   return (
     <div className="staff-container" ref={containerRef}>
-      <div
-        className="staff-scroll"
-        style={{ width: '100%' }}
-      >
+      <div className="staff-scroll" style={{ width: '100%' }}>
         <div className="staff" style={{ minWidth: totalWidth }}>
           <p className="clef">𝄞|</p>
           {renderStaffLines()}

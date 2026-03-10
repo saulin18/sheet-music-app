@@ -10,14 +10,14 @@
   position: relative;
   height: 160px;
   background: transparent;
- /* max-width: 800px; We don't need to set a max width here because it will be set by the parent */
+  /* max-width: 800px; We don't need to set a max width here because it will be set by the parent */
   display: flex;
   align-items: center;
   justify-content: start;
 }
 
 /** Padding between rows */
-.staff-row{
+.staff-row {
   padding-block: 10px;
 }
 
@@ -44,7 +44,6 @@
   isolation: isolate;
   z-index: 10;
 }
-
 
 .note:hover {
   transform: scale(1.15) translateY(-3px);

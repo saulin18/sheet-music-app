@@ -1,4 +1,4 @@
-import type { Duration, NoteName } from "./types";
+import type { Duration, NoteName } from './types';
 
 export const NOTE_NAMES: NoteName[] = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 export const DURATIONS: Duration[] = ['whole', 'half', 'quarter', 'eighth'];

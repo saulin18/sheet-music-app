@@ -87,8 +87,8 @@ export function JazzSheets() {
           isRest={isRest}
           selectedNoteOctave={selectedNoteOctave}
           setSelectedNoteOctave={setSelectedNoteOctave}
-          onNoteSelect={setSelectedNote}
-          onChordSelect={setSelectedChord}
+          onNoteSelect={handleNoteSelect}
+          onChordSelect={handleChordSelect}
           onDurationSelect={setSelectedDuration}
           onAccidentalToggle={setSelectedAccidental}
           onRestToggle={() => setIsRest(!isRest)}

@@ -20,9 +20,9 @@ export function noteToYPosition(note: NoteName, octave: number): number {
     A: 5,
     B: 6,
   };
-  
+
   const basePosition = notePositions[note];
   const octaveOffset = (octave - 4) * 7;
-  
+
   return basePosition + octaveOffset;
 }

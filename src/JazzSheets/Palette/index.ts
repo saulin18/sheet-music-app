@@ -1,1 +1,1 @@
-export { Palette } from "./Palette";
+export { Palette } from './Palette';

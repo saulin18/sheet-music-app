@@ -3,9 +3,8 @@ import { Palette } from './Palette';
 import { PlaybackControls } from './PlaybackControls';
 import { SongList } from './SongList';
 import { useSongs } from '#shared/useSongs';
+import type { NoteName } from '#shared/types';
 import './JazzSheets.css';
-
-let isInitializing = true;
 
 export function JazzSheets() {
   const {
@@ -32,11 +31,20 @@ export function JazzSheets() {
     handleMaximumWidthChange,
     setIsRest,
     setSelectedNote,
+    setSelectedChord,
     setSelectedDuration,
     setSelectedAccidental,
     setSelectedNoteOctave,
-    setSelectedChord,
-  } = useSongs(isInitializing);
+  } = useSongs();
+
+  const handleNoteSelect = (note: NoteName) => {
+    setSelectedNote(note);
+    setSelectedChord(null);
+  };
+  const handleChordSelect = (chord: NoteName) => {
+    setSelectedChord(chord);
+    setSelectedNote(null);
+  };
 
   return (
     <div className="main-content">

@@ -17,6 +17,7 @@ vi.mock('@tanstack/react-router', () => ({
     </a>
   ),
   Outlet: () => <div>Outlet Content</div>,
+  useRouterState: vi.fn(() => '/'),
 }));
 
 describe('AppLayout', () => {

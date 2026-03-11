@@ -1,5 +1,5 @@
-import type { NoteName, Note } from "#shared/types";
-import { LINE_SPACING, STAFF_TOP } from "#shared/constants";
+import type { NoteName, Note } from '#shared/types';
+import { LINE_SPACING, STAFF_TOP } from '#shared/constants';
 
 export const getNoteY = (note: Note): number => {
   if (note.note === null) {

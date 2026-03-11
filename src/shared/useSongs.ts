@@ -12,11 +12,27 @@ import {
 } from '#shared/types';
 import { usePlayback } from './usePlayback';
 
-export const useSongs = (isInitializing: boolean) => {
-  const [music, setMusic] = useState<(Note | Chord)[]>([]);
+let initialLoadFromStorage = false;
+
+const getInitialMusic = (): (Note | Chord)[] => {
+  try {
+    const saved = localStorage.getItem('music');
+    if (saved) {
+      initialLoadFromStorage = true;
+      return JSON.parse(saved) as (Note | Chord)[];
+    }
+    return [];
+  } catch {
+    return [];
+  }
+};
+
+export const useSongs = () => {
+  const [music, setMusic] = useState<(Note | Chord)[]>(getInitialMusic);
+  const didLoadFromStorage = useRef(initialLoadFromStorage);
   const [selectedNote, setSelectedNote] = useState<NoteName | null>('C');
   const [selectedNoteOctave, setSelectedNoteOctave] = useState<number>(4);
-  const [selectedChord, setSelectedChord] = useState<NoteName | null>('C');
+  const [selectedChord, setSelectedChord] = useState<NoteName | null>(null);
 
   const [selectedDuration, setSelectedDuration] = useState<Duration>('quarter');
   const [selectedAccidental, setSelectedAccidental] = useState<Accidental>('');
@@ -40,21 +56,8 @@ export const useSongs = (isInitializing: boolean) => {
   const [rowsStaff, setRowsStaff] = useState<
     { notes: (Note | Chord)[]; position: number }[]
   >([]);
-  const didLoadFromStorage = useRef(false);
   const skipInitialSave = useRef(false);
   const lastWidthRef = useRef(0);
-
-  //Get the music from the localStorage
-  useEffect(() => {
-    if (isInitializing) {
-      isInitializing = false;
-      const savedMusic = localStorage.getItem('music');
-      if (savedMusic) {
-        setMusic(JSON.parse(savedMusic));
-      }
-      didLoadFromStorage.current = true;
-    }
-  }, []);
 
   const handleNoteClick = useCallback((position: number) => {
     console.log('noteClick ', position);
@@ -107,7 +110,7 @@ export const useSongs = (isInitializing: boolean) => {
       setTempo(song.tempo);
       handleStop();
     },
-    [handleStop],
+    [handleStop, setTempo],
   );
 
   const handleClear = useCallback(() => {
@@ -116,21 +119,14 @@ export const useSongs = (isInitializing: boolean) => {
   }, [handleStop]);
 
   useEffect(() => {
+    const ref = animationRef;
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
+      const frameId = ref.current;
+      if (frameId != null) {
+        cancelAnimationFrame(frameId);
       }
     };
-  }, []);
-
-  useEffect(() => {
-    if (typeof selectedChord === 'string') {
-      setSelectedNote(null);
-    }
-    if (typeof selectedNote === 'string') {
-      setSelectedChord(null);
-    }
-  }, [selectedChord, selectedNote]);
+  }, [animationRef]);
 
   /**
    * We pass the actual width of the staff and we use it to calculate the number of notes per row

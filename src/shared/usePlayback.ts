@@ -3,9 +3,7 @@ import { DURATION_BEATS } from '#shared/constants';
 import { type Note, type Chord } from '#shared/types';
 import * as Tone from 'tone';
 
-export const usePlayback = (
-  music: (Note | Chord)[]   
-) => {
+export const usePlayback = (music: (Note | Chord)[]) => {
   const pianoSampler = new Tone.Sampler({
     urls: {
       C4: 'C4.mp3',
@@ -95,7 +93,7 @@ export const usePlayback = (
     };
 
     animationRef.current = requestAnimationFrame(animate);
-  }, [music, tempo, currentPosition, getTotalBeats]);
+  }, [music, tempo, currentPosition, getTotalBeats, pianoSampler]);
 
   const handlePause = useCallback(() => {
     setIsPlaying(false);
@@ -113,12 +111,11 @@ export const usePlayback = (
     positionRef.current = 0;
     setCurrentPosition(0);
     pianoSampler.releaseAll();
-  }, []);
+  }, [pianoSampler]);
 
   const handleTempoChange = useCallback((newTempo: number) => {
     setTempo(newTempo);
   }, []);
-
 
   return {
     handlePlay,
@@ -132,6 +129,6 @@ export const usePlayback = (
     lastTimeRef,
     positionRef,
     setTempo,
-    setIsPlaying
+    setIsPlaying,
   };
 };
